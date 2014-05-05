@@ -1,0 +1,12 @@
+---
+- name: ensure the user is created
+  user: name={{ user_name }} comment="Superhero"
+
+- name: ensure the user's public ssh key is copied
+  authorized_key: user={{ user_name }} key="{{ lookup('file', user_local_ssh_key_path) }}"
+
+- name: ensure sudoers.d is enabled
+  lineinfile: dest=/etc/sudoers state=present backup=yes regexp="^#includedir /etc/sudoers.d" line="#includedir /etc/sudoers.d"
+
+- name: ensure the user can execute sudo commands without a password
+  copy: content="%{{ user_name }} ALL=(ALL) NOPASSWD:ALL" dest=/etc/sudoers.d/{{ user_name }} owner=root group=root mode=0440
