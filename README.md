@@ -16,7 +16,7 @@ user_name: deploy
 user_local_ssh_key_path: ~/.ssh/id_rsa.pub
 ```
 
-The local ssh key path will be transferred from your workstation to the server being provisioned.
+The local ssh key path will be transferred from your workstation to the server(s) being provisioned.
 
 ## Example playbook
 
@@ -47,6 +47,10 @@ user_name: thor
 ## Requirements
 
 Tested on ubuntu 12.04 LTS but it should work on other versions that are similar.
+
+## Ansible galaxy
+
+You can find it on the official [ansible galaxy](https://galaxy.ansible.com/list#/roles/818) if you want to rate it.
 
 ## License
 
