@@ -1,4 +1,4 @@
-## What is ansible-user?
+## What is ansible-user? [![Build Status](https://secure.travis-ci.org/nickjj/ansible-user.png)](http://travis-ci.org/nickjj/ansible-user)
 
 It is an [ansible](http://www.ansible.com/home) role to create a user and perform common tasks such as transferring a public ssh key and enabling password less sudo for that user.
 
