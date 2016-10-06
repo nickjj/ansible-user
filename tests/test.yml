@@ -1,7 +1,8 @@
 ---
+
 - hosts: localhost
   remote_user: travis
-  sudo: true
+  become: true
   vars:
     user_local_ssh_key_path: /tmp/id_rsa.pub
 

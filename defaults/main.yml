@@ -1,3 +1,4 @@
 ---
+
 user_name: deploy
 user_local_ssh_key_path: ~/.ssh/id_rsa.pub
