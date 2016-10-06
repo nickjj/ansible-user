@@ -1,7 +1,7 @@
 ## What is ansible-user? [![Build Status](https://secure.travis-ci.org/nickjj/ansible-user.png)](http://travis-ci.org/nickjj/ansible-user)
 
 It is an [Ansible](http://www.ansible.com/home) role to create a user and
-perform common tasks such as transferring a public ssh key and enabling password
+perform common tasks such as transferring a public SSH key and enabling password
 less sudo for that user.
 
 ### What problem does it solve and why is it useful?
@@ -16,11 +16,12 @@ to worry about the minutia of writing these tasks in every playbook.
 
 ```
 ---
+
 user_name: deploy
 user_local_ssh_key_path: ~/.ssh/id_rsa.pub
 ```
 
-The local ssh key path will be transferred from your workstation to the
+The local SSH key path will be transferred from your workstation to the
 server(s) being provisioned.
 
 ## Example playbook
@@ -32,6 +33,7 @@ To use this role edit your `site.yml` file to look something like this:
 
 ```
 ---
+
 - name: ensure app servers are configured
 - hosts: app
 
@@ -45,6 +47,7 @@ directory and then making it look something like this:
 
 ```
 ---
+
 user_name: thor
 ```
 
