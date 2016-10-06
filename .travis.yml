@@ -10,8 +10,7 @@ before_install:
 
 install:
   - "pip install ansible==2.1"
-  - "pwd; ls -l"
-  - "printf '[defaults]\nroles_path = ../' > ansible.cfg"
+  - "printf '[defaults]\nroles_path = .' > ansible.cfg"
 
 script:
   - "ansible-playbook $SITE_AND_INVENTORY --syntax-check"
