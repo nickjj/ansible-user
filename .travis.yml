@@ -10,6 +10,7 @@ before_install:
 
 install:
   - "pip install ansible==2.1"
+  - "pwd; ls -l"
   - "printf '[defaults]\nroles_path = ../' > ansible.cfg"
 
 script:
