@@ -62,7 +62,7 @@ Tested on ubuntu 12.04 LTS but it should work on other versions that are similar
 ## Ansible Galaxy
 
 You can find it on the official
-[Ansible Galaxy](https://galaxy.ansible.com/list#/roles/818) if you want to
+[Ansible Galaxy](https://galaxy.ansible.com/nickjj/user) if you want to
 rate it.
 
 ## License
