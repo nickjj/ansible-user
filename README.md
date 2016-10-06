@@ -56,10 +56,10 @@ user_name: thor
 
 Tested on ubuntu 12.04 LTS but it should work on other versions that are similar.
 
-## Ansible galaxy
+## Ansible Galaxy
 
 You can find it on the official
-[ansible galaxy](https://galaxy.ansible.com/list#/roles/818) if you want to
+[Ansible Galaxy](https://galaxy.ansible.com/list#/roles/818) if you want to
 rate it.
 
 ## License
