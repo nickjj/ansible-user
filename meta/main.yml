@@ -2,7 +2,7 @@
 
 galaxy_info:
   author: Nick Janetakis
-  description: Configure a user, setup a public ssh key and enable passwordless sudo for this user.
+  description: Configure a user, setup a public SSH key and enable passwordless sudo for this user.
   company: 
   license: license (MIT)
   min_ansible_version: 2.0

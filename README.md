@@ -34,7 +34,7 @@ To use this role edit your `site.yml` file to look something like this:
 ```
 ---
 
-- name: ensure app servers are configured
+- name: Configure app server(s)
 - hosts: app
 
   roles:
