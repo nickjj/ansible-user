@@ -47,7 +47,8 @@ To use this role edit your `site.yml` file to look something like this:
 ---
 
 - name: Configure app server(s)
-- hosts: app
+  hosts: app
+  become: True
 
   roles:
     - { role: nickjj.user, tags: user }
