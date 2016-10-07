@@ -1,8 +1,11 @@
 ## What is ansible-user? [![Build Status](https://secure.travis-ci.org/nickjj/ansible-user.png)](http://travis-ci.org/nickjj/ansible-user)
 
-It is an [Ansible](http://www.ansible.com/home) role to create a user and
-perform common tasks such as transferring a public SSH key and enabling password
-less sudo for that user.
+It is an [Ansible](http://www.ansible.com/home) role to:
+
+- Create optional groups
+- Create a user
+- Copy over an SSH key to authorize logins
+- Enable passwordless sudo
 
 ### What problem does it solve and why is it useful?
 
@@ -17,11 +20,20 @@ to worry about the minutia of writing these tasks in every playbook.
 ```
 ---
 
-user_name: deploy
-user_local_ssh_key_path: ~/.ssh/id_rsa.pub
+# Optionally create and assign more groups than the default. If empty, users
+# will automatically be a part of their user's group, ie. deploy/deploy.
+user_groups: []
+
+user_name: 'deploy'
+user_shell: '/bin/bash'
+user_enable_passwordless_sudo: True
+
+# If you do not want SSH keys to be copied, use an empty string. Keep in mind
+# if you do this, you won't be able to login!
+user_local_ssh_key_path: '~/.ssh/id_rsa.pub'
 ```
 
-The local SSH key path will be transferred from your workstation to the
+If set, the local SSH key path will be transferred from your workstation to the
 server(s) being provisioned.
 
 ## Example playbook

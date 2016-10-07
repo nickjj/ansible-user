@@ -1,4 +1,8 @@
 ---
 
-user_name: deploy
-user_local_ssh_key_path: ~/.ssh/id_rsa.pub
+user_groups: []
+user_name: 'deploy'
+user_shell: '/bin/bash'
+
+user_local_ssh_key_path: '~/.ssh/id_rsa.pub'
+user_enable_passwordless_sudo: True

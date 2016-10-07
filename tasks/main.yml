@@ -1,13 +1,37 @@
 ---
 
+- name: Create group(s)
+  group:
+    name: '{{ item }}'
+  with_items: '{{ user_groups }}'
+  when: user_groups | d()
+
 - name: Create user
-  user: name={{ user_name }} comment="Superhero"
+  user:
+    groups: '{{ (user_groups | join(",")) | d(omit) }}'
+    name: '{{ user_name }}'
+    shell: '{{ user_shell | d(omit) }}'
 
 - name: Copy public SSH key
-  authorized_key: user={{ user_name }} key="{{ lookup('file', user_local_ssh_key_path) }}"
+  authorized_key:
+    user: '{{ user_name }}'
+    key: '{{ lookup("file", user_local_ssh_key_path) }}'
+  when: user_local_ssh_key_path | d()
 
 - name: Enable sudoers.d
-  lineinfile: dest=/etc/sudoers state=present backup=yes regexp="^#includedir /etc/sudoers.d" line="#includedir /etc/sudoers.d"
+  lineinfile:
+    dest: '/etc/sudoers'
+    state: 'present'
+    backup: 'yes'
+    regexp: '^#includedir /etc/sudoers.d'
+    line: '#includedir /etc/sudoers.d'
+  when: user_enable_passwordless_sudo | bool
 
 - name: Enable passwordless sudo
-  copy: content="%{{ user_name }} ALL=(ALL) NOPASSWD:ALL" dest=/etc/sudoers.d/{{ user_name }} owner=root group=root mode=0440
+  copy:
+    content: '%{{ user_name }} ALL=(ALL) NOPASSWD:ALL'
+    dest: '/etc/sudoers.d/{{ user_name }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0440'
+  when: user_enable_passwordless_sudo | bool
