@@ -7,6 +7,11 @@ It is an [Ansible](http://www.ansible.com/home) role to:
 - Copy over an SSH key to authorize logins
 - Enable passwordless sudo
 
+##### Supported platforms:
+
+- Ubuntu 16.04 LTS (Xenial)
+- Debian 8 (Jessie)
+
 ### What problem does it solve and why is it useful?
 
 Often times you just want a single user created on a box with a few common tasks
@@ -67,10 +72,6 @@ user_name: thor
 ## Installation
 
 `$ ansible-galaxy install nickjj.user`
-
-## Requirements
-
-Tested on ubuntu 12.04 LTS but it should work on other versions that are similar.
 
 ## Ansible Galaxy
 

@@ -1,26 +1,50 @@
 ---
-language: "python"
-python: "2.7"
+
+sudo: required
 
 env:
-  - SITE_AND_INVENTORY="tests/test.yml -i tests/inventory"
+  - distro: 'ubuntu1604'
+    init: '/lib/systemd/systemd'
+    run_opts: '--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'
+  - distro: 'debian8'
+    init: '/lib/systemd/systemd'
+    run_opts: '--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'
+
+services:
+  - docker
 
 before_install:
-  - "ssh-keygen -t rsa -P '' -f /tmp/id_rsa"
-
-install:
-  - "pip install ansible==2.1"
-  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+  - 'docker pull geerlingguy/docker-${distro}-ansible:latest'
 
 script:
-  - "ansible-playbook $SITE_AND_INVENTORY --syntax-check"
-  - "ansible-playbook $SITE_AND_INVENTORY --connection=local -vvvv"
+  - container_id=$(mktemp)
   - >
-    ansible-playbook $SITE_AND_INVENTORY --connection=local
+    docker run
+    --detach
+    --volume="${PWD}":/etc/ansible/roles/this_role:ro ${run_opts}
+    geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"
+
+  - >
+    docker exec --tty "$(cat ${container_id})" env TERM=xterm
+    ansible-playbook /etc/ansible/roles/this_role/tests/main.yml
+    --syntax-check
+  - >
+    docker exec --tty "$(cat ${container_id})" env TERM=xterm
+    ansible-playbook /etc/ansible/roles/this_role/tests/main.yml
+
+  - idempotence=$(mktemp)
+  - >
+    docker exec "$(cat ${container_id})"
+    ansible-playbook /etc/ansible/roles/this_role/tests/main.yml
+    | tee -a ${idempotence}
+  - >
+    tail ${idempotence}
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
+
   - >
+    docker exec --tty "$(cat ${container_id})" env TERM=xterm
     cat /tmp/id_rsa.pub
     | grep -q 'ssh'
     && (echo 'File test: pass' && exit 0)
