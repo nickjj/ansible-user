@@ -1,5 +1,12 @@
 # Changelog
 
+### v0.3.1
+
+*Released: October 9th 2016*
+
+- Append groups to users
+- Test against Ubuntu 16.04 LTS and Debian Jessie on Travis-CI
+
 ### v0.3.0
 
 *Released: October 7th 2016*
