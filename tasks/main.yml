@@ -9,6 +9,7 @@
 - name: Create user
   user:
     groups: '{{ (user_groups | join(",")) | d(omit) }}'
+    append: True
     name: '{{ user_name }}'
     shell: '{{ user_shell | d(omit) }}'
 
