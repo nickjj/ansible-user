@@ -23,7 +23,7 @@
   lineinfile:
     dest: '/etc/sudoers'
     state: 'present'
-    backup: 'yes'
+    backup: True
     regexp: '^#includedir /etc/sudoers.d'
     line: '#includedir /etc/sudoers.d'
   when: user_enable_passwordless_sudo | bool

@@ -2,8 +2,23 @@
 
 - hosts: all
 
+  pre_tasks:
+    - name: Create fake SSH directory
+      file:
+        path: '/root/.ssh'
+        state: 'directory'
+        mode: '0755'
+
+    - name: Generate fake SSH key
+      lineinfile:
+        dest: '/root/.ssh/id_rsa.pub'
+        regexp: 'ssh-rsa foo hello@world'
+        line: 'ssh-rsa foo hello@world'
+        state: 'present'
+        create: True
+
   vars:
-    user_local_ssh_key_path: /tmp/id_rsa.pub
+    user_local_ssh_key_path: /root/.ssh/id_rsa.pub
 
   roles:
     - this_role

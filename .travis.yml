@@ -45,7 +45,7 @@ script:
 
   - >
     docker exec --tty "$(cat ${container_id})" env TERM=xterm
-    cat /tmp/id_rsa.pub
-    | grep -q 'ssh'
-    && (echo 'File test: pass' && exit 0)
-    || (echo 'File test: fail' && exit 1)
+    cat /etc/sudoers.d/deploy
+    | grep -q 'NOPASSWD:ALL'
+    && (echo 'Passwordless sudo test: pass' && exit 0)
+    || (echo 'Passwordless sudo test: fail' && exit 1)
