@@ -2,5 +2,8 @@
 
 - hosts: all
 
+  vars:
+    user_local_ssh_key_path: /tmp/id_rsa.pub
+
   roles:
     - this_role
