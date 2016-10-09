@@ -10,7 +10,10 @@ galaxy_info:
   platforms:
   - name: Ubuntu
     versions:
-    - all
+    - xenial
+  - name: Debian
+    versions:
+    - jessie
 
   categories:
   - system
