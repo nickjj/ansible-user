@@ -33,9 +33,13 @@ user_name: 'deploy'
 user_shell: '/bin/bash'
 user_enable_passwordless_sudo: True
 
-# If you do not want SSH keys to be copied, use an empty string. Keep in mind
-# if you do this, you won't be able to login!
-user_local_ssh_key_path: '~/.ssh/id_rsa.pub'
+# Create an SSH keypair in this user's ~/.ssh directory. This is useful if you
+# want to do things like sign SSL certificates as this user.
+user_generate_ssh_key: False
+
+# If you do not want an SSH public key written to authorized_keys, use an
+# empty string. Keep in mind if you do this, you won't be able to login!
+user_authorized_keys_path: '~/.ssh/id_rsa.pub'
 ```
 
 If set, the local SSH key path will be transferred from your workstation to the

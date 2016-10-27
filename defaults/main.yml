@@ -3,6 +3,7 @@
 user_groups: []
 user_name: 'deploy'
 user_shell: '/bin/bash'
+user_generate_ssh_key: False
 
-user_local_ssh_key_path: '~/.ssh/id_rsa.pub'
+user_authorized_keys_path: '~/.ssh/id_rsa.pub'
 user_enable_passwordless_sudo: True
