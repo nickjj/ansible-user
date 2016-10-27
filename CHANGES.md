@@ -1,5 +1,11 @@
 # Changelog
 
+### v0.3.3
+
+*Released: October 27th 2016*
+
+- Add ability to generate an SSH key pair (disabled by default)
+
 ### v0.3.1
 
 *Released: October 9th 2016*
