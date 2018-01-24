@@ -1,39 +1,39 @@
 ---
 
-- name: Create group(s)
+- name: Create user group(s)
   group:
-    name: '{{ item }}'
-  with_items: '{{ user_groups }}'
-  when: user_groups | d()
+    name: "{{ item }}"
+  with_items: "{{ user_groups }}"
+  when: user_groups
 
 - name: Create user
   user:
-    generate_ssh_key: '{{ user_generate_ssh_key | d(omit) }}' 
-    groups: '{{ (user_groups | join(",")) | d(omit) }}'
+    generate_ssh_key: "{{ user_generate_ssh_key }}"
+    groups: "{{ (user_groups | join(',')) }}"
     append: True
-    name: '{{ user_name }}'
-    shell: '{{ user_shell | d(omit) }}'
-
-- name: Set authorized_key to allow SSH based logins
-  authorized_key:
-    user: '{{ user_name }}'
-    key: '{{ lookup("file", user_authorized_keys_path) }}'
-  when: user_authorized_keys_path | d()
+    name: "{{ user_name }}"
+    shell: "{{ user_shell }}"
 
 - name: Enable sudoers.d
   lineinfile:
-    dest: '/etc/sudoers'
-    state: 'present'
+    path: "/etc/sudoers"
+    regexp: "^#includedir /etc/sudoers.d"
+    line: "#includedir /etc/sudoers.d"
+    state: "present"
     backup: True
-    regexp: '^#includedir /etc/sudoers.d'
-    line: '#includedir /etc/sudoers.d'
-  when: user_enable_passwordless_sudo | bool
+  when: user_enable_passwordless_sudo
 
 - name: Enable passwordless sudo
   copy:
-    content: '%{{ user_name }} ALL=(ALL) NOPASSWD:ALL'
-    dest: '/etc/sudoers.d/{{ user_name }}'
-    owner: 'root'
-    group: 'root'
-    mode: '0440'
-  when: user_enable_passwordless_sudo | bool
+    content: "%{{ user_name }} ALL=(ALL) NOPASSWD:ALL"
+    dest: "/etc/sudoers.d/{{ user_name }}"
+    owner: "root"
+    group: "root"
+    mode: "0440"
+  when: user_enable_passwordless_sudo
+
+- name: Set authorized_key to allow SSH key based logins
+  authorized_key:
+    user: "{{ user_name }}"
+    key: "{{ lookup('file', user_local_ssh_key_path) }}"
+  when: user_local_ssh_key_path | d()

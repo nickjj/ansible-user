@@ -1,24 +1,34 @@
 ---
 
-- hosts: all
+- hosts: "all"
+
+  vars:
+    user_local_ssh_key_path: "/root/.ssh/id_rsa.pub"
 
   pre_tasks:
     - name: Create fake SSH directory
       file:
-        path: '/root/.ssh'
-        state: 'directory'
-        mode: '0755'
+        path: "/root/.ssh"
+        state: "directory"
+        owner: "root"
+        group: "root"
+        mode: "0755"
 
     - name: Generate fake SSH key
       lineinfile:
-        dest: '/root/.ssh/id_rsa.pub'
-        regexp: 'ssh-rsa foo hello@world'
-        line: 'ssh-rsa foo hello@world'
-        state: 'present'
+        path: "/root/.ssh/id_rsa.pub"
+        line: "ssh-rsa foo hello@world"
+        state: "present"
         create: True
 
-  vars:
-    user_local_ssh_key_path: /root/.ssh/id_rsa.pub
+    - name: Ensure /etc/sudoers.d/deploy contains 'NOPASSWD:ALL'
+      lineinfile:
+        path: "/etc/sudoers.d/deploy"
+        line: "NOPASSWD:ALL"
+        state: "present"
+      check_mode: True
+      register: presence
+      failed_when: (presence | changed) or (presence | failed)
 
   roles:
-    - this_role
+    - "role_under_test"
