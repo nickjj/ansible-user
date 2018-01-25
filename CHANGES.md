@@ -1,5 +1,13 @@
 # Changelog
 
+### v0.4.0
+
+*Released: January 25th 2018*
+
+- Rename `user_authorized_keys_path` to `user_local_ssh_key_path`
+- Add proper tests and support for Ubuntu 16, Debian Stretch and Debian Jessie
+- Update format and style consistencies
+
 ### v0.3.3
 
 *Released: October 27th 2016*
