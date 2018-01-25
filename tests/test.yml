@@ -5,6 +5,9 @@
   vars:
     user_local_ssh_key_path: "/root/.ssh/id_rsa.pub"
 
+  roles:
+    - "role_under_test"
+
   pre_tasks:
     - name: Create fake SSH directory
       file:
@@ -21,14 +24,8 @@
         state: "present"
         create: True
 
+  post_tasks:
     - name: Ensure /etc/sudoers.d/deploy contains 'NOPASSWD:ALL'
-      lineinfile:
-        path: "/etc/sudoers.d/deploy"
-        line: "NOPASSWD:ALL"
-        state: "present"
-      check_mode: True
-      register: presence
-      failed_when: (presence | changed) or (presence | failed)
-
-  roles:
-    - "role_under_test"
+      command: grep NOPASSWD:ALL /etc/sudoers.d/deploy
+      register: result
+      changed_when: result.rc != 0
