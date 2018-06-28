@@ -2,21 +2,24 @@
 
 galaxy_info:
   author: "Nick Janetakis"
-  description: "Create a user, enable passwordless sudo and allow for SSH key based logins."
+  description: "Create and configure a user for SSH key based logins and passwordless sudo."
   company:
-  license: "license (MIT)"
-  min_ansible_version: 2.4
+  license: "MIT"
+  min_ansible_version: "2.5"
 
   platforms:
     - name: "Ubuntu"
       versions:
         - "xenial"
+        - "bionic"
     - name: "Debian"
       versions:
         - "jessie"
         - "stretch"
 
-  categories:
+  galaxy_tags:
+    - "groups"
     - "system"
+    - "users"
 
 dependencies: []

@@ -1,15 +1,17 @@
 ---
 
 - hosts: "all"
+  become: True
 
   vars:
     user_local_ssh_key_path: "/root/.ssh/id_rsa.pub"
+    user_groups: ["foo", "bar"]
 
   roles:
     - "role_under_test"
 
   pre_tasks:
-    - name: Create fake SSH directory
+    - name: "Create fake SSH directory"
       file:
         path: "/root/.ssh"
         state: "directory"
@@ -17,7 +19,7 @@
         group: "root"
         mode: "0755"
 
-    - name: Generate fake SSH key
+    - name: "Generate fake SSH key"
       lineinfile:
         path: "/root/.ssh/id_rsa.pub"
         line: "ssh-rsa foo hello@world"
@@ -25,7 +27,23 @@
         create: True
 
   post_tasks:
-    - name: Ensure /etc/sudoers.d/deploy contains 'NOPASSWD:ALL'
+    - name: "Ensure user belongs to the correct groups"
+      command: groups {{ user_name }}
+      register: result
+      changed_when: result.stdout.split(":")[1] | trim != ([user_name] + user_groups) | join(" ")
+
+    - name: "Ensure authorized_key is set"
+      command: cat /root/.ssh/id_rsa.pub
+      register: result
+      changed_when: result.stdout != "ssh-rsa foo hello@world"
+
+    - name: "Ensure /etc/sudoers.d/deploy contains 'NOPASSWD:ALL'"
       command: grep NOPASSWD:ALL /etc/sudoers.d/deploy
       register: result
       changed_when: result.rc != 0
+
+    - name: "Ensure passwordless sudo works"
+      become_user: "{{ user_name }}"
+      command: sudo whoami
+      register: result
+      changed_when: result.stdout != "root"

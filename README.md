@@ -3,31 +3,32 @@
 It is an [Ansible](http://www.ansible.com/home) role to:
 
 - Create user groups
-- Create a single user and configure its shell
+- Create a single user, add it to any groups you created and configure its shell
+- Set your public SSH key as an authorized key so you can login without a password
 - Enable passwordless sudo
-- Set your public SSH key as an authorized key so you can SSH into your server
 
 ## Why would you want to use this role?
 
-When you spin up a new box, you'll often want a user to exist so you can run
-whatever apps you need to run as that user, because running things as root is a
-bad idea from a security POV.
+When you spin up a new server, you'll often want to set up a non-root user that
+you can login as and run your applications under. That's because running your
+applications as root is a questionable idea from a security point of view.
 
-This role does that, but it also includes a few other user related tasks, such
-as what's listed above in the bullets. Having all of these things together in
-1 role means less work for you to do!
+This role sets you up to do that, but it also includes a few other user related
+tasks, such as what's listed in the above bullets. Having all of these things
+together in 1 role means less work for you to do!
 
 ## Supported platforms
 
 - Ubuntu 16.04 LTS (Xenial)
+- Ubuntu 18.04 LTS (Bionic)
 - Debian 8 (Jessie)
 - Debian 9 (Stretch)
 
 ## Role variables
 
 ```
-# Optionally create system wide groups. If empty, users will automatically be
-# a part of their user's group, ie. deploy:deploy.
+# Optionally create additional user groupss. If empty, the user you create will
+# automatically be a part of their user's group, ie. deploy:deploy.
 user_groups: []
 
 # The user you want to create.
@@ -36,22 +37,26 @@ user_name: "deploy"
 # Which shell should you default to? Typically "bash" or "sh".
 user_shell: "/bin/bash"
 
-# Do you want to enable using sudo commands without a password?
-user_enable_passwordless_sudo: True
+# Do you want to create an SSH keypair for this user? You probably don't for a
+# regular user that you plan to login as which is why it's disabled by default.
+user_generate_ssh_key: False
 
 # When set, this will copy your local SSH public key from this path to your
 # user's authorized keys on your server.
 #
 # If you don't want this behavior then use an empty string as the value but keep
-# in mind you won't be able to log in to your server as your new user with SSH
-# keys since you won't be authorized.
+# in mind this role does not set a default password for the user you create, so
+# you will be locked out if you don't supply your public SSH key.
 user_local_ssh_key_path: "~/.ssh/id_rsa.pub"
+
+# Do you want to enable running root commands without needing a password?
+user_enable_passwordless_sudo: True
 ```
 
 ## Example usage
 
 For the sake of this example let's assume you have a group called **app** and
-you have a typical `site.yml` file.
+you have a typical `site.yml` playbook.
 
 To use this role edit your `site.yml` file to look something like this:
 
@@ -82,7 +87,7 @@ Now you would run `ansible-playbook -i inventory/hosts site.yml -t user`.
 
 `$ ansible-galaxy install nickjj.user`
 
-## Ansible Galaxy
+### Ansible Galaxy
 
 You can find it on the official
 [Ansible Galaxy](https://galaxy.ansible.com/nickjj/user) if you want to rate it.

@@ -1,20 +1,25 @@
 ---
 
-- name: Create user group(s)
+- name: "Create user group(s)"
   group:
     name: "{{ item }}"
-  with_items: "{{ user_groups }}"
+  loop: "{{ user_groups }}"
   when: user_groups
 
-- name: Create user
+- name: "Create user"
   user:
-    generate_ssh_key: "{{ user_generate_ssh_key }}"
-    groups: "{{ (user_groups | join(',')) }}"
-    append: True
     name: "{{ user_name }}"
+    groups: "{{ (user_groups | join(',')) }}"
+    generate_ssh_key: "{{ user_generate_ssh_key }}"
     shell: "{{ user_shell }}"
 
-- name: Enable sudoers.d
+- name: "Set authorized_key to allow SSH key based logins"
+  authorized_key:
+    user: "{{ user_name }}"
+    key: "{{ lookup('file', user_local_ssh_key_path) }}"
+  when: user_local_ssh_key_path
+
+- name: "Enable including files from sudoers.d/"
   lineinfile:
     path: "/etc/sudoers"
     regexp: "^#includedir /etc/sudoers.d"
@@ -23,7 +28,7 @@
     backup: True
   when: user_enable_passwordless_sudo
 
-- name: Enable passwordless sudo
+- name: "Enable passwordless sudo"
   copy:
     content: "%{{ user_name }} ALL=(ALL) NOPASSWD:ALL"
     dest: "/etc/sudoers.d/{{ user_name }}"
@@ -31,9 +36,3 @@
     group: "root"
     mode: "0440"
   when: user_enable_passwordless_sudo
-
-- name: Set authorized_key to allow SSH key based logins
-  authorized_key:
-    user: "{{ user_name }}"
-    key: "{{ lookup('file', user_local_ssh_key_path) }}"
-  when: user_local_ssh_key_path | d()
