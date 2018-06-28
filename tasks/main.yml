@@ -17,7 +17,7 @@
   authorized_key:
     user: "{{ user_name }}"
     key: "{{ lookup('file', user_local_ssh_key_path) }}"
-  when: user_local_ssh_key_path
+  when: user_local_ssh_key_path | default(False)
 
 - name: "Enable including files from sudoers.d/"
   lineinfile:
