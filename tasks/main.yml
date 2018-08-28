@@ -27,6 +27,15 @@
     state: "present"
     backup: True
   when: user_enable_passwordless_sudo
+  
+- name: Disable sudoers.d
+  lineinfile:
+    path: "/etc/sudoers"
+    regexp: "^#includedir /etc/sudoers.d"
+    line: "#includedir /etc/sudoers.d"
+    state: "absent"
+    backup: True
+  when: user_enable_passwordless_sudo == False  
 
 - name: "Enable passwordless sudo"
   copy:
