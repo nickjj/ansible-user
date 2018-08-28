@@ -28,7 +28,7 @@
     backup: True
   when: user_enable_passwordless_sudo
   
-- name: Enable sudoers.d
+- name: Disable sudoers.d
   lineinfile:
     path: "/etc/sudoers"
     regexp: "^#includedir /etc/sudoers.d"
