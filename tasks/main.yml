@@ -39,7 +39,7 @@
 
 - name: "Enable passwordless sudo"
   copy:
-    content: "%{{ user_name }} ALL=(ALL) NOPASSWD:ALL"
+    content: "{{ user_name }} ALL=(ALL) NOPASSWD:ALL\n"
     dest: "/etc/sudoers.d/{{ user_name }}"
     owner: "root"
     group: "root"
